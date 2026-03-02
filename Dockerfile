@@ -14,6 +14,8 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV SERVICE=micro-gate
+ENV AGENT_PRIVATE_KEY=
+ENV MERCHANT_WALLET_ADDRESS=
 COPY --from=builder /app ./
 EXPOSE 3001
 CMD ["sh", "-c", "if [ \"$SERVICE\" = \"agent-client\" ]; then npm run start:agent-client; else npm run start:micro-gate; fi"]

@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { type Request, type Response } from 'express';
 import dotenv from 'dotenv';
 import { paymentMiddleware } from 'x402-express';
 
@@ -6,15 +6,22 @@ dotenv.config();
 
 const app = express();
 const PORT = Number(process.env.PORT ?? 3001);
-const PAY_TO = process.env.PAY_TO_ADDRESS ?? '0x0000000000000000000000000000000000000000';
+const MERCHANT_WALLET_ADDRESS =
+  process.env.MERCHANT_WALLET_ADDRESS ?? '0x0000000000000000000000000000000000000000';
 
-app.get('/health', (_req, res) => {
-  res.json({ status: 'ok', service: 'micro-gate', network: 'base', amount: '0.05' });
+app.get('/health', (_req: Request, res: Response) => {
+  res.json({
+    status: 'ok',
+    service: 'micro-gate',
+    network: 'base',
+    amount: '0.05',
+    merchantWallet: MERCHANT_WALLET_ADDRESS
+  });
 });
 
 app.get(
   '/premium/market-data/:ticker',
-  paymentMiddleware(PAY_TO, {
+  paymentMiddleware(MERCHANT_WALLET_ADDRESS as `0x${string}`, {
     '/premium/market-data/*': {
       price: '$0.05',
       network: 'base',
@@ -23,7 +30,7 @@ app.get(
       }
     }
   }),
-  (req, res) => {
+  (req: Request<{ ticker: string }>, res: Response) => {
     const ticker = req.params.ticker.toUpperCase();
     const quote = Number((Math.random() * 1000 + 10).toFixed(2));
 

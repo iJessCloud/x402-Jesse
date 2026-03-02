@@ -7,9 +7,9 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build -ws",
-    "dev": "npm run dev -ws",
-    "start:agent-client": "npm run start -w agent-client",
-    "start:micro-gate": "npm run start -w micro-gate"
+    "build": "npm run build --workspaces",
+    "dev": "npm run dev --workspaces",
+    "start:agent-client": "AGENT_PRIVATE_KEY=${AGENT_PRIVATE_KEY:?AGENT_PRIVATE_KEY is required} npm run start -w agent-client",
+    "start:micro-gate": "MERCHANT_WALLET_ADDRESS=${MERCHANT_WALLET_ADDRESS:?MERCHANT_WALLET_ADDRESS is required} npm run start -w micro-gate"
   }
 }
